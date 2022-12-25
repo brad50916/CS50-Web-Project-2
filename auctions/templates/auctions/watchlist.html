@@ -3,6 +3,7 @@
 {% block body %}
     <h2>Watchlist</h2>
     {% for l in watchlist%}
+    <a href="{% url 'listing' l.watchlist.id %}" class="href">
         <div class="list">
             <div class="img">
                 {% if l.watchlist.url %}
@@ -10,12 +11,13 @@
                 {% endif %}
             </div>
             <div class="text">
-                <a href="{% url 'listing' l.watchlist.id %}" id="product_name">{{l.watchlist.product}}</a>
+                <div id="product_name">{{l.watchlist.product}}</div>
                 <div id="price">Price: ${{l.watchlist.price}}</div>
                 <div>{{l.watchlist.des}} </div>
                 <br>
                 <div id="date">{{l.watchlist.date}}</div>
             </div>
         </div>
+    </a>
     {% endfor %}
 {% endblock %}

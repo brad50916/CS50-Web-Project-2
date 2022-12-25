@@ -18,6 +18,7 @@
     </form>
 
     {% for l in list%}
+    <a href="{% url 'listing' l.id %}" class="href">
         <div class="list">
             <div class="img">
                 {% if l.url %}
@@ -25,7 +26,7 @@
                 {% endif %}
             </div>
             <div class="text">
-                <a href="{% url 'listing' l.id %}" id="product_name">{{l.product}}</a>
+                <div id="product_name">{{l.product}}</div>
                 <div id="price">Price: ${{l.price}}</div>
                 <div>{{l.des}} </div>
                 <br>
@@ -33,6 +34,7 @@
                 <div>{{l.user}}</div>
             </div>
         </div>
+    </a>
     {% endfor %}
 
 {% endblock %}

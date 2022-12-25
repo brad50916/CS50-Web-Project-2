@@ -16,6 +16,9 @@ form{
     border-radius: 5px;
     font-family:'Helvetica';font-style:normal;font-weight:400;font-size: large;
 }
+.list:hover {
+    box-shadow: 0 3px 8px rgba(103, 103, 103, 0.8);
+}
 div[class="img"]{
     img{
         float: left;
@@ -76,4 +79,16 @@ div{
 }
 #comment {
     border:1px solid $border;
+}
+.href:link {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+}
+.href:visited {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+}
+.href:hover {
+    color: #000000;
+    text-decoration: none;
 }
