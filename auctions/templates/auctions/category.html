@@ -1,0 +1,38 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Categories</h2>
+    <form action="{% url 'category' %}" method="POST">
+        {% csrf_token %}
+        <div class="wb">
+            <select name="cate" onchange="this.form.submit()">
+                <option disabled selected value> -- select an option -- </option>
+                <option value="el">Electronics</option>
+                <option value="to">Toys</option>
+                <option value="fa">Fashion</option>
+                <option value="fu">Furnitures</option>
+                <option value="be">Beauty, health, and household care</option>
+                <option value="other">Others</option>
+            </select>
+        </div>
+    </form>
+
+    {% for l in list%}
+        <div class="list">
+            <div class="img">
+                {% if l.url %}
+                    <img src="{{l.url}}" alt="item picture">
+                {% endif %}
+            </div>
+            <div class="text">
+                <a href="{% url 'listing' l.id %}" id="product_name">{{l.product}}</a>
+                <div id="price">Price: ${{l.price}}</div>
+                <div>{{l.des}} </div>
+                <br>
+                <div id="date">{{l.date}}</div>
+                <div>{{l.user}}</div>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}

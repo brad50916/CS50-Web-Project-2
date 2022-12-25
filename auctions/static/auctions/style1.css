@@ -1,0 +1,87 @@
+body {
+  padding: 20px;
+}
+
+form div {
+  margin-top: 15px;
+}
+
+.list {
+  height: 210px;
+  margin-left: 10px;
+  margin-top: 15px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  font-family: "Helvetica";
+  font-style: normal;
+  font-weight: 400;
+  font-size: large;
+}
+
+div[class=img] img {
+  float: left;
+  margin-left: 40px;
+  margin-top: 10px;
+  max-width: 205px;
+  max-height: 190px;
+}
+
+div[class=img1] img {
+  margin-left: 40px;
+  margin-top: 10px;
+  max-width: 410px;
+  max-height: 380px;
+}
+
+.text {
+  margin-top: 20px;
+  margin-left: 300px;
+}
+
+h2 {
+  margin-left: 10px;
+}
+
+#product_name {
+  font-weight: bold;
+  font-size: 25px;
+}
+
+#price {
+  font-weight: bold;
+}
+
+#price1, #detail {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+#date {
+  font-size: 15px;
+  font-weight: lighter;
+  color: rgb(122, 122, 122);
+}
+
+div a:link {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+}
+div a:visited {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+}
+div a:hover {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.wb {
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+#comment {
+  border: 1px solid lightgray;
+}
+
+/*# sourceMappingURL=style1.css.map */

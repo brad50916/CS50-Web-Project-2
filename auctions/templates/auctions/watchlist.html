@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Watchlist</h2>
+    {% for l in watchlist%}
+        <div class="list">
+            <div class="img">
+                {% if l.watchlist.url %}
+                    <img src="{{l.watchlist.url}}" alt="item picture">
+                {% endif %}
+            </div>
+            <div class="text">
+                <a href="{% url 'listing' l.watchlist.id %}" id="product_name">{{l.watchlist.product}}</a>
+                <div id="price">Price: ${{l.watchlist.price}}</div>
+                <div>{{l.watchlist.des}} </div>
+                <br>
+                <div id="date">{{l.watchlist.date}}</div>
+                <div>{{l.watchlist.user}}</div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
