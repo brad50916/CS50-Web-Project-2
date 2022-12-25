@@ -54,10 +54,10 @@ h2{
     font-weight:bold;
     font-size: 20px;
 }
-#date{
+#date, .right{
     font-size: 15px;
     font-weight: lighter;
-    color: rgb(122, 122, 122);
+    color: rgb(84, 84, 84);
 }
 div{
     a:link {
@@ -91,4 +91,13 @@ div{
 .href:hover {
     color: #000000;
     text-decoration: none;
+}
+.left{
+    float: left;
+    text-align: left;
+}
+.right{
+    float: right;
+    text-align: right;
+
 }

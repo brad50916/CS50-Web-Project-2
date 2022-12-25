@@ -85,7 +85,7 @@
             {% if cexist == 1 %}
             <ul class="list-group">
                 {% for c in comment%}
-                <li class="list-group-item">{{c.user}}: {{c.comment}}</li>
+                <li class="list-group-item"><span class="left">{{c.comment}}</span><span class="right">{{c.user}}</span></li>
                 {% endfor %}
             </ul>
             {% endif %}
