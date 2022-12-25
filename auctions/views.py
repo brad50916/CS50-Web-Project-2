@@ -31,7 +31,7 @@ class createform(forms.Form):
         self.fields['category'].widget.attrs['style'] = 'width:200px; height:25px; display:block'
 
 class bidform(forms.Form):
-    bid = forms.IntegerField()
+    bid = forms.IntegerField(label="", widget=forms.TextInput(attrs={'placeholder': 'Bid'}))
     def __init__(self, *args, **kwargs):
         super(bidform, self).__init__(*args, **kwargs)
         self.fields['bid'].widget.attrs['style'] = 'display:block' 
@@ -138,7 +138,8 @@ def listing(request, list_id):
                     "form": bidform(),
                     "id": id,
                     "exist": exist,
-                    "comment": com
+                    "comment": com,
+                    "cexist": cexist
                 })
             elif 'comment' in request.POST:
                 c = Comment(product=list, comment=request.POST["comment"], user=user)
@@ -154,7 +155,31 @@ def listing(request, list_id):
                     "comment": com,
                     "cexist": cexist
                 })
-                
+            elif 'watch' in request.POST:
+                w = Watchlist(user=user, watchlist=list)
+                w.save()
+                exist=1
+                return render(request, "auctions/listing.html", {
+                    "list": list,
+                    "bid": bid,
+                    "form": bidform(),
+                    "id": id,
+                    "exist": exist,
+                    "comment": com,
+                    "cexist": cexist
+                })
+            elif 'rwatch' in request.POST:
+                Watchlist.objects.get(user=user, watchlist=list).delete()
+                exist=0
+                return render(request, "auctions/listing.html", {
+                    "list": list,
+                    "bid": bid,
+                    "form": bidform(),
+                    "id": id,
+                    "exist": exist,
+                    "comment": com,
+                    "cexist": cexist
+                })
         return render(request, "auctions/listing.html", {
             "list": list,
             "bid": bid,
@@ -164,7 +189,6 @@ def listing(request, list_id):
             "comment": com,
             "cexist": cexist
         })
-
     else:
         if request.method == "POST":
             if 'bid' in request.POST:
@@ -197,25 +221,12 @@ def listing(request, list_id):
 @login_required(login_url='login')
 def watchlist(request, user_id):
     user=request.user
-    if request.method == "POST":
-        product_id=request.POST["id"] 
-        list = List.objects.get(pk=product_id)
-        w = Watchlist(user=user, watchlist=list)
-        w.save()
+    # if request.method == "POST":
+    #     product_id=request.POST["id"] 
+    #     list = List.objects.get(pk=product_id)
+    #     w = Watchlist(user=user, watchlist=list)
+    #     w.save()
     wl=Watchlist.objects.filter(user=user)
-    return render(request, "auctions/watchlist.html", {
-        "id": user_id,
-        "watchlist": wl
-    })
-
-@login_required(login_url='login')
-def rwatchlist(request, user_id):
-    user=request.user
-    if request.method == "POST":
-        product_id=request.POST["id"] 
-        list = List.objects.get(pk=product_id)
-        Watchlist.objects.get(user=user, watchlist=list).delete()
-        wl=Watchlist.objects.filter(user=user)
     return render(request, "auctions/watchlist.html", {
         "id": user_id,
         "watchlist": wl

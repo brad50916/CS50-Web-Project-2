@@ -9,17 +9,17 @@
     {% if user.is_authenticated %}
         {% if exist != 1 %}
         <div class="wb">
-            <form action="{% url 'watchlist' id%}" method="POST">
+            <form action="{% url 'listing' list.id%}" method="POST">
                 {% csrf_token%}
-                <input type="hidden" value={{list.id}} name="id">
+                <input type="hidden" value={{list.id}} name="watch">
                 <input type="submit" class="btn btn-outline-success" value="Add to watchlist"> 
             </form>
         </div>
         {% else %}
         <div class="wb">
-            <form action="{% url 'rwatchlist' id%}" method="POST">
+            <form action="{% url 'listing' list.id%}" method="POST">
                 {% csrf_token%}
-                <input type="hidden" value={{list.id}} name="id">
+                <input type="hidden" value={{list.id}} name="rwatch">
                 <input type="submit" class="btn btn-outline-danger" value="Remove from watchlist"> 
             </form>
         </div>
@@ -44,7 +44,6 @@
             {% endif %}
         </div>
         <div class="text1">
-            <div id="product_name">{{list.product}}</div>
             <div>{{list.des}} </div>
             <div id="price1">Price: ${{list.price}}</div>
             {% if list.close != 1 %} 
