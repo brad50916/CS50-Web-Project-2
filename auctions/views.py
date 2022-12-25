@@ -6,6 +6,30 @@ from django.urls import reverse
 from datetime import datetime
 from .models import User, List, Bid, Comment, Watchlist
 from django.contrib.auth.decorators import login_required
+from django import forms
+
+class createform(forms.Form):
+    options = (
+        ('el', 'Electronics'),
+        ('to', 'Toys'),
+        ('fa', 'Fashion'),
+        ('fu', 'Furnitures'),
+        ('be', 'Beauty, health, and household care'),
+        ('other', 'Others'),
+    )
+    product = forms.CharField(label="Product Name")
+    price = forms.IntegerField(label="Price")
+    description = forms.CharField(label="Description", widget=forms.Textarea)
+    url = forms.CharField(label="url", required=False)
+    category = forms.ChoiceField(choices=options)
+    def __init__(self, *args, **kwargs):
+        super(createform, self).__init__(*args, **kwargs)
+        self.fields['product'].widget.attrs['style'] = 'width:200px; height:25px; display:block'
+        self.fields['price'].widget.attrs['style'] = 'width:200px; height:25px; display:block'
+        self.fields['description'].widget.attrs['style'] = 'width:700px; height:200px; display:block'
+        self.fields['url'].widget.attrs['style'] = 'width:200px; height:25px; display:block'
+        self.fields['category'].widget.attrs['style'] = 'width:200px; height:25px; display:block'
+
 
 def index(request):
     if request.user.is_authenticated:
@@ -21,21 +45,33 @@ def index(request):
 @login_required(login_url='login')
 def create(request):
     id=request.user.id 
-    if request.method == "POST":
+
+    form = createform(request.POST)
+    if form.is_valid():
+        product=form.cleaned_data["product"]
+        price=form.cleaned_data["price"]
+        des=form.cleaned_data["description"]
+        url=form.cleaned_data["url"]
+        category=form.cleaned_data["category"]
+
         name = request.user
-        f = List(product=request.POST["product"], price=request.POST["price"], des=request.POST["des"], 
-        url=request.POST["url"], date=datetime.now(), user=name, category=request.POST["cate"])
+        f = List(product=product, price=price, des=des, 
+        url=url, date=datetime.now(), user=name, category=category)
         f.save()
+        b = Bid(product=f)
+        b.save()
         return HttpResponseRedirect(reverse("index"))
 
     return render(request, "auctions/create.html",{
-        "id": id
+        "id": id,
+        "form1": createform()
     })
 
 def listing(request, list_id):
 
     list = List.objects.get(pk=list_id)
     bid = Bid.objects.get(product=list)
+    
     com=0
     try:
         com = Comment.objects.filter(product=list)

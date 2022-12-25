@@ -23,7 +23,7 @@ class Watchlist(models.Model):
 
 class Bid(models.Model):
     product = models.ForeignKey(List, on_delete=models.CASCADE, related_name="bid_product", null=True)
-    price = models.IntegerField()
+    price = models.IntegerField(null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bid_user", null=True, blank=True)
     def __str__(self):
         return f"{self.product}: {self.price}"

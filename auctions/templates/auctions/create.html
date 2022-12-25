@@ -5,31 +5,10 @@
 
     <form id="create" action="{% url 'create' %}" method="POST">
         {% csrf_token %}
+        {{ form1 }}
+        
         <div>
-            Product Name: <input type="text" name="product">
-        </div>
-        <div>
-            Price: <input type="text" name="price">
-        </div>
-        <div>
-            Description: <textarea rows=10 cols=50 name="des"></textarea> 
-        </div>
-        <div>
-            Url(optional): <input type="text" name="url">
-        </div>
-        <div>
-            Category:
-            <select name="cate">
-                <option value="el">Electronics</option>
-                <option value="to">Toys</option>
-                <option value="fa">Fashion</option>
-                <option value="fu">Furnitures</option>
-                <option value="be">Beauty, health, and household care</option>
-                <option value="other">Others</option>
-            </select>
-        </div>
-        <div>
-            <input type="submit" value="Create">
+            <input type="submit" value="Create" class="btn btn-outline-primary">
         </div>
     </form>
     {% if message %}
