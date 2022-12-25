@@ -40,13 +40,17 @@ class bidform(forms.Form):
             visible.field.widget.attrs['aria-label'] = 'Small'
             visible.field.widget.attrs['aria-describedby'] = 'inputGroup-sizing-sm'
 
+def count(user):
+    c=Watchlist.objects.filter(user=user)
+    return c.count()
 
 def index(request):
     if request.user.is_authenticated:
         id = request.user.id
         return render(request, "auctions/index.html", {
         "list": List.objects.all(),
-        "id": id
+        "id": id,
+        "count": count(request.user)
     })
     return render(request, "auctions/index.html", {
         "list": List.objects.all()
@@ -74,7 +78,8 @@ def create(request):
 
     return render(request, "auctions/create.html",{
         "id": id,
-        "form1": createform()
+        "form1": createform(),
+        "count": count(request.user)
     })
 
 def listing(request, list_id):
@@ -116,7 +121,8 @@ def listing(request, list_id):
                                 "id": id,
                                 "exist": exist,
                                 "comment": com,
-                                "cexist": cexist
+                                "cexist": cexist,
+                                "count": count(request.user)
                         }) 
                     else:
                         return render(request, "auctions/listing.html", {
@@ -127,7 +133,8 @@ def listing(request, list_id):
                             "id": id,
                             "exist": exist,
                             "comment": com,
-                            "cexist": cexist
+                            "cexist": cexist,
+                            "count": count(request.user)
                         })
             elif 'close' in request.POST:
                 list.close=1
@@ -139,7 +146,8 @@ def listing(request, list_id):
                     "id": id,
                     "exist": exist,
                     "comment": com,
-                    "cexist": cexist
+                    "cexist": cexist,
+                    "count": count(request.user)
                 })
             elif 'comment' in request.POST:
                 c = Comment(product=list, comment=request.POST["comment"], user=user)
@@ -153,7 +161,8 @@ def listing(request, list_id):
                     "id": id,
                     "exist": exist,
                     "comment": com,
-                    "cexist": cexist
+                    "cexist": cexist,
+                    "count": count(request.user)
                 })
             elif 'watch' in request.POST:
                 w = Watchlist(user=user, watchlist=list)
@@ -166,7 +175,8 @@ def listing(request, list_id):
                     "id": id,
                     "exist": exist,
                     "comment": com,
-                    "cexist": cexist
+                    "cexist": cexist,
+                    "count": count(request.user)
                 })
             elif 'rwatch' in request.POST:
                 Watchlist.objects.get(user=user, watchlist=list).delete()
@@ -178,7 +188,8 @@ def listing(request, list_id):
                     "id": id,
                     "exist": exist,
                     "comment": com,
-                    "cexist": cexist
+                    "cexist": cexist,
+                    "count": count(request.user)
                 })
         return render(request, "auctions/listing.html", {
             "list": list,
@@ -187,7 +198,8 @@ def listing(request, list_id):
             "id": id,
             "exist": exist,
             "comment": com,
-            "cexist": cexist
+            "cexist": cexist,
+            "count": count(request.user)
         })
     else:
         if request.method == "POST":
@@ -198,7 +210,8 @@ def listing(request, list_id):
                     "form": bidform(),
                     "message2": "You need login to place bid.",
                     "comment": com,
-                    "cexist": cexist
+                    "cexist": cexist,
+                    "count": count(request.user)
                 })
             elif 'comment' in request.POST:
                 return render(request, "auctions/listing.html", {
@@ -207,7 +220,8 @@ def listing(request, list_id):
                     "form": bidform(),
                     "message3": "You need login to submit your comment.",
                     "comment": com,
-                    "cexist": cexist
+                    "cexist": cexist,
+                    "count": count(request.user)
                 })
         else:
             return render(request, "auctions/listing.html", {
@@ -215,21 +229,18 @@ def listing(request, list_id):
                 "bid": bid,
                 "form": bidform(),
                 "comment": com,
-                "cexist": cexist
+                "cexist": cexist,
+                "count": count(request.user)
             })
 
 @login_required(login_url='login')
 def watchlist(request, user_id):
     user=request.user
-    # if request.method == "POST":
-    #     product_id=request.POST["id"] 
-    #     list = List.objects.get(pk=product_id)
-    #     w = Watchlist(user=user, watchlist=list)
-    #     w.save()
     wl=Watchlist.objects.filter(user=user)
     return render(request, "auctions/watchlist.html", {
         "id": user_id,
-        "watchlist": wl
+        "watchlist": wl,
+        "count": count(request.user)
     })
 
 def category(request):
@@ -239,10 +250,12 @@ def category(request):
         print(cate)
         return render(request, "auctions/category.html", {
             "id": id,
-            "list": cate
+            "list": cate,
+            "count": count(request.user)
         })
     return render(request, "auctions/category.html", {
-            "id": id
+            "id": id,
+            "count": count(request.user)
         })
 
 def login_view(request):

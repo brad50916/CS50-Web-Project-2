@@ -28,7 +28,7 @@
             </li>
             {% if user.is_authenticated %}
                 <li class="na-item">
-                    <a class="nav-link" href="{% url 'watchlist' id%}">Watchlist</a>
+                    <a class="nav-link" href="{% url 'watchlist' id%}">Watchlist<span class="badge text-bg-secondary">{{count}}</span></a>
                 </li> 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
