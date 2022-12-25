@@ -60,9 +60,7 @@
         {% if list.close != 1 %}
         <form action="{% url 'listing' list.id %}" method="POST">
             {% csrf_token%}
-            <div>
-                <input type="text" name="bid" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-            </div>
+            {{ form }}
             <div>
                 <input type="submit" class="btn btn-outline-primary" value="Place Bid">
             </div>

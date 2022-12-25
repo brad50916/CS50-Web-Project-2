@@ -30,6 +30,16 @@ class createform(forms.Form):
         self.fields['url'].widget.attrs['style'] = 'width:200px; height:25px; display:block'
         self.fields['category'].widget.attrs['style'] = 'width:200px; height:25px; display:block'
 
+class bidform(forms.Form):
+    bid = forms.IntegerField()
+    def __init__(self, *args, **kwargs):
+        super(bidform, self).__init__(*args, **kwargs)
+        self.fields['bid'].widget.attrs['style'] = 'display:block' 
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+            visible.field.widget.attrs['aria-label'] = 'Small'
+            visible.field.widget.attrs['aria-describedby'] = 'inputGroup-sizing-sm'
+
 
 def index(request):
     if request.user.is_authenticated:
@@ -90,36 +100,42 @@ def listing(request, list_id):
 
         if request.method == "POST":
             if 'bid' in request.POST:
-                if int(request.POST["bid"]) > list.price:
-                    bid.user=user
-                    bid.save()
-                    list.price=request.POST["bid"]
-                    list.save()
-                    return render(request, "auctions/listing.html", {
+                form = bidform(request.POST)
+                if form.is_valid():
+                    bid_price=form.cleaned_data["bid"]
+                    if bid_price > list.price:
+                        bid.user=user
+                        bid.save()
+                        list.price=bid_price
+                        list.save()
+                        return render(request, "auctions/listing.html", {
+                                "list": list,
+                                "bid": bid,
+                                "form": bidform(),
+                                "message1": "Successful bid.",
+                                "id": id,
+                                "exist": exist,
+                                "comment": com,
+                                "cexist": cexist
+                        }) 
+                    else:
+                        return render(request, "auctions/listing.html", {
                             "list": list,
                             "bid": bid,
-                            "message1": "Successful bid.",
+                            "form": bidform(),
+                            "message2": "Invalid bid price.",
                             "id": id,
                             "exist": exist,
                             "comment": com,
                             "cexist": cexist
-                    }) 
-                else:
-                    return render(request, "auctions/listing.html", {
-                        "list": list,
-                        "bid": bid,
-                        "message2": "Invalid bid price.",
-                        "id": id,
-                        "exist": exist,
-                        "comment": com,
-                        "cexist": cexist
-                    })
+                        })
             elif 'close' in request.POST:
                 list.close=1
                 list.save()
                 return render(request, "auctions/listing.html", {
                     "list": list,
                     "bid": bid,
+                    "form": bidform(),
                     "id": id,
                     "exist": exist,
                     "comment": com
@@ -132,6 +148,7 @@ def listing(request, list_id):
                 return render(request, "auctions/listing.html", {
                     "list": list,
                     "bid": bid,
+                    "form": bidform(),
                     "id": id,
                     "exist": exist,
                     "comment": com,
@@ -141,6 +158,7 @@ def listing(request, list_id):
         return render(request, "auctions/listing.html", {
             "list": list,
             "bid": bid,
+            "form": bidform(),
             "id": id,
             "exist": exist,
             "comment": com,
@@ -153,6 +171,7 @@ def listing(request, list_id):
                 return render(request, "auctions/listing.html", {
                     "list": list,
                     "bid": bid,
+                    "form": bidform(),
                     "message2": "You need login to place bid.",
                     "comment": com,
                     "cexist": cexist
@@ -161,6 +180,7 @@ def listing(request, list_id):
                 return render(request, "auctions/listing.html", {
                     "list": list,
                     "bid": bid,
+                    "form": bidform(),
                     "message3": "You need login to submit your comment.",
                     "comment": com,
                     "cexist": cexist
@@ -169,6 +189,7 @@ def listing(request, list_id):
             return render(request, "auctions/listing.html", {
                 "list": list,
                 "bid": bid,
+                "form": bidform(),
                 "comment": com,
                 "cexist": cexist
             })
