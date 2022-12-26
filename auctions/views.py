@@ -40,6 +40,16 @@ class bidform(forms.Form):
             visible.field.widget.attrs['aria-label'] = 'Small'
             visible.field.widget.attrs['aria-describedby'] = 'inputGroup-sizing-sm'
 
+class commentform(forms.Form):
+    com = forms.CharField(label="", widget=forms.Textarea)
+    def __init__(self, *args, **kwargs):
+        super(commentform, self).__init__(*args, **kwargs)
+        self.fields['com'].widget.attrs['style'] = 'width:700px; height:200px; display:block'
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+            visible.field.widget.attrs['aria-label'] = 'Small'
+            visible.field.widget.attrs['aria-describedby'] = 'inputGroup-sizing-sm'
+
 def count(user):
     c=Watchlist.objects.filter(user=user)
     return c.count()
@@ -122,7 +132,8 @@ def listing(request, list_id):
                                 "exist": exist,
                                 "comment": com,
                                 "cexist": cexist,
-                                "count": count(request.user)
+                                "count": count(request.user),
+                                "form2": commentform()
                         }) 
                     else:
                         return render(request, "auctions/listing.html", {
@@ -134,7 +145,8 @@ def listing(request, list_id):
                             "exist": exist,
                             "comment": com,
                             "cexist": cexist,
-                            "count": count(request.user)
+                            "count": count(request.user),
+                            "form2": commentform()
                         })
             elif 'close' in request.POST:
                 list.close=1
@@ -147,23 +159,29 @@ def listing(request, list_id):
                     "exist": exist,
                     "comment": com,
                     "cexist": cexist,
-                    "count": count(request.user)
+                    "count": count(request.user),
+                    "form2": commentform()
                 })
             elif 'comment' in request.POST:
-                c = Comment(product=list, comment=request.POST["comment"], user=user)
-                c.save()
-                com = Comment.objects.filter(product=list)
-                cexist = 1
-                return render(request, "auctions/listing.html", {
-                    "list": list,
-                    "bid": bid,
-                    "form": bidform(),
-                    "id": id,
-                    "exist": exist,
-                    "comment": com,
-                    "cexist": cexist,
-                    "count": count(request.user)
-                })
+                form2 = commentform(request.POST)
+                if form2.is_valid():
+                    comment=form2.cleaned_data["com"]
+                    print(comment)
+                    c = Comment(product=list, comment=comment, user=user)
+                    c.save()
+                    com = Comment.objects.filter(product=list)
+                    cexist = 1
+                    return render(request, "auctions/listing.html", {
+                        "list": list,
+                        "bid": bid,
+                        "form": bidform(),
+                        "id": id,
+                        "exist": exist,
+                        "comment": com,
+                        "cexist": cexist,
+                        "count": count(request.user),
+                        "form2": commentform()
+                    })
             elif 'watch' in request.POST:
                 w = Watchlist(user=user, watchlist=list)
                 w.save()
@@ -176,7 +194,8 @@ def listing(request, list_id):
                     "exist": exist,
                     "comment": com,
                     "cexist": cexist,
-                    "count": count(request.user)
+                    "count": count(request.user),
+                    "form2": commentform()
                 })
             elif 'rwatch' in request.POST:
                 Watchlist.objects.get(user=user, watchlist=list).delete()
@@ -189,7 +208,8 @@ def listing(request, list_id):
                     "exist": exist,
                     "comment": com,
                     "cexist": cexist,
-                    "count": count(request.user)
+                    "count": count(request.user),
+                    "form2": commentform()
                 })
         return render(request, "auctions/listing.html", {
             "list": list,
@@ -199,7 +219,8 @@ def listing(request, list_id):
             "exist": exist,
             "comment": com,
             "cexist": cexist,
-            "count": count(request.user)
+            "count": count(request.user),
+            "form2": commentform()
         })
     else:
         if request.method == "POST":

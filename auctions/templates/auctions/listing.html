@@ -45,7 +45,7 @@
         </div>
         <div class="text1">
             <div>{{list.des}} </div>
-            <div id="price1">Price: ${{list.price}}</div>
+            <div id="price1">Current bid: ${{list.price}}</div>
             {% if list.close != 1 %} 
             <div> Current bidder: {{bid.user}}</div>
             {% elif id == bid.user.id%}
@@ -91,11 +91,9 @@
             {% endif %}
             <form action="{% url 'listing' list.id %}" method="POST">
                 {% csrf_token%}
+                {{form2}}
                 <div>
-                    <textarea rows=5 cols=100 name="comment" id="comment"></textarea> 
-                </div>
-                <div>
-                    <input type="submit" value="Submit your comment" class="btn btn-outline-primary">
+                    <input type="submit" value="Submit your comment" name="comment" class="btn btn-outline-primary">
                 </div>
             </form>
             {% if message3 %}
